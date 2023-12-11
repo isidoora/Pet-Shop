@@ -32,30 +32,32 @@ INSERT INTO product(product_category, product_name, price)
 	("birds", "food", 743.35),
     ("birds", "treat", 349),
     ("birds", "toy", 209.29),
-    ("birds", "hygine", 699.59),
+    ("birds", "hygiene", 699.59),
     ("birds", "transporter", 2200),
 	("fish", "food", 443.22),
     ("fish", "decoration", 1199),
-    ("fish", "hygine", 769.4),
+    ("fish", "hygiene", 769.4),
     ("fish", "lighting", 2999),
-    ("fish", "aquarsalesium", 4299);
+    ("fish", "aquarium", 4299);
 
+
+-- here I imported sales Table with Import Wizard
 -- TABLE sales(
 -- id INT PRIMARY KEY,
 -- product_id INT NOT NULL,
 -- date DATE NOT NULL,
--- quantity INT NOT NULL,
--- );
--- cheking imported data
+-- quantity INT NOT NULL)
+
+-- checking imported data
 SELECT 
     *
 FROM
     sales
 LIMIT 10;
--- deleting empty column
+-- deleting an empty column
 ALTER TABLE sales DROP COLUMN ï»¿dumm;
 
--- total revanue and number of sales
+-- total revenue and number of sales
 SELECT SUM(s.quantity * p.price) AS revanue, COUNT(DISTINCT s.id) AS total_sales
 FROM sales s
 LEFT JOIN product p
@@ -63,7 +65,7 @@ LEFT JOIN product p
 
 -- best sale
 -- 147141.95 
--- not included in final report
+-- not included in the final report
 SELECT
 	s.id,
     SUM(s.quantity * p.price) as best_sale
@@ -74,7 +76,7 @@ GROUP BY 1
 ORDER BY 2 DESC
 LIMIT 1;
 
--- revanue by category
+-- revenue by category
 SELECT 
 	DATE_FORMAT(s.order_date, "%Y-%m-%d") AS order_date, -- order_date was in datetime format
     p.product_category,
@@ -84,17 +86,17 @@ LEFT JOIN product p
 	ON s.product_id = p.product_id
 ORDER BY 2, 1;
 
--- revanue by month
+-- revenue by month
 SELECT 
 	MONTH(s.order_date) AS "month",
-    SUM(s.quantity * p.price) AS revanue
+    SUM(s.quantity * p.price) AS revenue
 FROM sales s
 LEFT JOIN product p
 	ON s.product_id = p.product_id
 GROUP BY 1 
 ORDER BY 1;
 
--- revanue by distinct product name
+-- revenue by distinct product name
 WITH by_name AS(
 	SELECT 
     p.product_name,
